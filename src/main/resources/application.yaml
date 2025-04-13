@@ -1,14 +1,32 @@
 spring:
   application:
     name: herbal-impression
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/auth/realms/herbal-impression-app
   datasource:
-    url: jdbc:mysql://localhost:3306/herbal
+    url: jdbc:mysql://localhost:3306/herbal?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: ""
     driver-class-name: com.mysql.cj.jdbc.Driver
-
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
+
+server:
+  port: 9001
+
+keycloak:
+  auth-server-url: http://localhost:8080/auth
+  realm: herbal-impression-app
+  resource: herbal-impression-client
+  public-client: true
+  credentials:
+    secret: eec2a09e-803f-4c8e-a283-5a53f8e30bd3
+
+logging:
+  level:
+    org.springframework.security: DEBUG
