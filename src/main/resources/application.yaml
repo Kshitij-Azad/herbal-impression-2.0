@@ -25,7 +25,15 @@ keycloak:
   resource: herbal-impression-client
   public-client: true
   credentials:
-    secret: eec2a09e-803f-4c8e-a283-5a53f8e30bd3
+    secret: 8da6bd4c-3b84-48a8-9f86-5f07adeb5a7b
+#    secret: eec2a09e-803f-4c8e-a283-5a53f8e30bd3
+
+oauth2:
+  token:
+    url: http://localhost:8080/auth/realms/herbal-impression-app/protocol/openid-connect/token
+  client:
+    id: herbal-impression-client
+    secret: 8da6bd4c-3b84-48a8-9f86-5f07adeb5a7b
 
 logging:
   level:
