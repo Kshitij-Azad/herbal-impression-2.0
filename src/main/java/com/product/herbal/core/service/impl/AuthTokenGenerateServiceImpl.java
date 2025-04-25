@@ -1,5 +1,6 @@
 package com.product.herbal.core.service.impl;
 
+import com.product.herbal.core.domain.AuthTokenGenerateResponse;
 import com.product.herbal.core.service.AuthTokenGenerateService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,11 +20,11 @@ public class AuthTokenGenerateServiceImpl implements AuthTokenGenerateService {
     String keycloakTokenUrl;
 
     @Override
-    public JSONObject fetchAndModifyToken(String client_id, String client_secret, String username, String password, String grant_type, String scope) {
+    public AuthTokenGenerateResponse fetchAndModifyToken(String client_id, String client_secret, String username, String password, String grant_type, String scope) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("client_id", client_id);
         map.add("client_secret", client_secret);
@@ -33,17 +34,17 @@ public class AuthTokenGenerateServiceImpl implements AuthTokenGenerateService {
         if (scope != null && !scope.isEmpty()) {
             map.add("scope", scope);
         }
-
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(keycloakTokenUrl, request, String.class);
+        ResponseEntity<String> keycloakResponse = restTemplate.postForEntity(keycloakTokenUrl, request, String.class);
+        return genrateAuthTokenGenerateResponse(keycloakResponse);
+    }
 
+    private static AuthTokenGenerateResponse genrateAuthTokenGenerateResponse(ResponseEntity<String> response) {
+        AuthTokenGenerateResponse tokenGenerateResponse = new AuthTokenGenerateResponse();
         JSONObject tokenResponse = new JSONObject(response.getBody());
-        JSONObject customResponse = new JSONObject();
-        customResponse.put("access_token", tokenResponse.getString("access_token"));
-//        customResponse.put("expires_in", tokenResponse.getInt("expires_in"));
-//        customResponse.put("token_type", tokenResponse.getString("token_type"));
-
-        customResponse.put("custom_message", "Token fetched successfully!");
-        return customResponse;
+        tokenGenerateResponse.setAccess_token(tokenResponse.getString("access_token"));
+        tokenGenerateResponse.setExpires_in(tokenResponse.getInt("expires_in"));
+        tokenGenerateResponse.setMessage("Token fetched successfully!");
+        return tokenGenerateResponse;
     }
 }

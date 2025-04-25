@@ -1,9 +1,7 @@
-package com.product.herbal.core.model;
+package com.product.herbal.model;
 
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 
