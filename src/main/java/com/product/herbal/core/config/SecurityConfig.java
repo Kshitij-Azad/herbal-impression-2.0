@@ -20,7 +20,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf
+                        .ignoringAntMatchers("/auth/token") // disable CSRF for this specific path
+                )
                 .authorizeHttpRequests()
+                .antMatchers("/auth/**").permitAll()
                 .antMatchers("/public/**").permitAll()
                 .antMatchers("/admin/**").hasRole("admin")
                 .anyRequest().authenticated()

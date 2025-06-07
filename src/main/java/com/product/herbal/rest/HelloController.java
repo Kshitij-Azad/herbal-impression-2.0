@@ -1,4 +1,4 @@
-package com.product.herbal.core.rest;
+package com.product.herbal.rest;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
